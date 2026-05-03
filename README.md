@@ -1,16 +1,20 @@
 # WorkHound
 
-A CLI tool that sniffs out job listings across company career sites, filters them by title, level, and location (US-only), and tracks results in a local database. Works with any company that uses **Workday** or **Eightfold** for their job board.
+A CLI tool that sniffs out job listings across company career sites, filters them by title, level, and location, and tracks results in a local database. Works with any company that uses **Workday**, **Eightfold**, or **Greenhouse** for their job board.
 
-Ships with 12 built-in pharma companies, but you can add any company you want.
+Ships with 18 built-in pharma/biotech companies, but you can add any company you want.
 
 ## Why This Exists
 
-If you're actively job searching, you know the pain of scrolling through multiple career sites every day looking for relevant postings. This tool does that for you — it pulls listings from company job boards, filters them to what actually matches your search, and keeps a history so you don't re-check the same stuff. The built-in companies are pharma because that's my background, but you can add any company that runs on Workday or Eightfold.
+If you're actively job searching, you know the pain of scrolling through multiple career sites every day looking for relevant postings. This tool does that for you — it pulls listings from company job boards, filters them to what actually matches your search, and keeps a history so you don't re-check the same stuff. The built-in companies are pharma/biotech because that's my background, but you can add any company that runs on Workday, Eightfold, or Greenhouse.
 
 ## Built-in Companies
 
-Amgen, AstraZeneca, Biogen, BMS, Gilead, GSK, J&J, Merck, Novartis, Pfizer, Regeneron, Sanofi
+**Workday (11):** Amgen, Biogen, BMS, Gilead, GSK, J&J, Merck, Novartis, Pfizer, Regeneron, Sanofi
+
+**Eightfold (1):** AstraZeneca
+
+**Greenhouse (6):** Benchling, Insitro, Moderna, Recursion, Schrödinger, Tempus
 
 ## Install
 
@@ -50,8 +54,12 @@ workhound --setup
 # 2. Run a search
 workhound
 
-# 3. Export results to CSV
-workhound --csv
+# 3. Export results
+workhound --csv            # CSV
+workhound --json           # JSON
+
+# 4. Only recent postings
+workhound --days 7
 ```
 
 The `--setup` wizard asks for:
@@ -59,12 +67,13 @@ The `--setup` wizard asks for:
 - **Job level** — entry, mid, senior, leadership, or any (auto-excludes irrelevant titles)
 - **Keywords** — search terms sent to job board APIs (e.g. "software engineer, frontend, ML")
 - **Title filters** — patterns the job title must match (auto-filled from keywords if left blank)
+- **Location** — all US, specific states, or any location, with remote toggle
 
 ## What It Does
 
-1. Searches each company's Workday or Eightfold career API using your keywords
-2. Filters results: title must match your patterns, must be US-based, excludes unwanted levels
-3. Fetches job details (salary, education, years of experience) from individual postings
+1. Searches each company's career API concurrently using your keywords
+2. Filters results: title must match your patterns, location filter, excludes unwanted levels
+3. Fetches job details (salary, education, years of experience, posted date) from individual postings
 4. Deduplicates and displays a formatted table in the terminal
 5. Saves everything to a local SQLite database (`~/.workhound/workhound.db`)
 
@@ -77,6 +86,7 @@ The `--setup` wizard asks for:
 | `make dev`     | Install in editable mode for development     |
 | `make run`     | Run a search with the default profile        |
 | `make csv`     | Run a search and save results to CSV         |
+| `make json`    | Run a search and save results to JSON        |
 | `make setup`   | Create or edit a search profile              |
 | `make clean`   | Remove build artifacts                       |
 
@@ -90,14 +100,17 @@ workhound [options]
 
 | Flag                         | Description                                        |
 |------------------------------|----------------------------------------------------|
-| `--setup`                    | Create or edit a search profile (interactive)       |
+| `--setup`                    | Create a search profile (interactive)               |
+| `--edit-profile`             | Edit individual fields on an existing profile        |
 | `--profile NAME`             | Use a specific profile (default: "default")         |
 | `--list-profiles`            | Show all saved profiles                             |
 | `--show-profile`             | Show the active profile's full config               |
 | `--companies Merck,Pfizer`   | Only search specific companies                      |
 | `--list-companies`           | Show all available companies (built-in + custom)    |
 | `--max-pages N`              | Max pages per keyword per company (default: 5)      |
+| `--days N`                   | Only show jobs posted within the last N days         |
 | `--csv`                      | Save results to a CSV file                          |
+| `--json`                     | Save results to a JSON file                         |
 | `--no-salary`                | Skip salary lookup (faster)                         |
 | `--history`                  | Show past results from the database                 |
 | `--ssl`                      | Enable SSL verification (off by default)            |
@@ -106,13 +119,13 @@ workhound [options]
 
 | Flag                         | Description                                        |
 |------------------------------|----------------------------------------------------|
-| `--add-company`              | Add a custom Workday or Eightfold company           |
+| `--add-company`              | Add a custom Workday, Eightfold, or Greenhouse company |
 | `--remove-company NAME`      | Remove a custom company                             |
 | `--list-companies`           | Show all available companies                        |
 
 ## Adding Custom Companies
 
-You can add any company that uses Workday or Eightfold for their careers page:
+You can add any company that uses Workday, Eightfold, or Greenhouse for their careers page:
 
 ```bash
 # Interactive wizard
@@ -139,6 +152,16 @@ Most large companies use Workday. To find the API URL:
 
 Some companies use Eightfold. You just need the company's domain (e.g. `astrazeneca.com`) and the tool will auto-detect the API URL.
 
+### Finding a Greenhouse Board Token
+
+Many biotech startups use Greenhouse. The board token is the slug in the company's job board URL:
+
+```
+https://boards.greenhouse.io/<board_token>
+```
+
+For example, Moderna's board token is `modernatx`. You can find it by visiting the company's careers page and looking for a Greenhouse URL, or checking `https://boards.greenhouse.io/<company_name>`.
+
 ## Data Storage
 
 All data is stored locally in `~/.workhound/`:
@@ -148,6 +171,7 @@ All data is stored locally in `~/.workhound/`:
 | `workhound.db`    | SQLite database (profiles, jobs, companies) |
 
 CSV exports are saved to the current working directory as `jobs_YYYYMMDD_HHMMSS.csv`.
+JSON exports are saved as `jobs_YYYYMMDD_HHMMSS.json`.
 
 ## SSL Issues
 

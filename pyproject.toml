@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "workhound"
-version = "0.1.0"
-description = "CLI tool that sniffs out job listings across Workday and Eightfold career sites"
+version = "0.2.0"
+description = "CLI tool that sniffs out job listings across Workday, Eightfold, and Greenhouse career sites"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"

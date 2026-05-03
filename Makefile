@@ -1,4 +1,4 @@
-.PHONY: install dev run csv setup clean help
+.PHONY: install dev run csv json setup clean help
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-15s %s\n", $$1, $$2}'
@@ -14,6 +14,9 @@ run: ## Run a search with the default profile
 
 csv: ## Run a search and save to CSV
 	workhound --csv
+
+json: ## Run a search and save to JSON
+	workhound --json
 
 setup: ## Create or edit a search profile
 	workhound --setup
