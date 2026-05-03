@@ -4,6 +4,10 @@ A CLI tool that sniffs out job listings across company career sites, filters the
 
 Ships with 12 built-in companies, but you can add any company you want.
 
+## Why This Exists
+
+If you're actively job searching, you know the pain of scrolling through multiple career sites every day looking for relevant postings. This tool does that for you — it pulls listings from company job boards, filters them to what actually matches your search, and keeps a history so you don't re-check the same stuff. The built-in companies are pharma because that's my background, but you can add any company that runs on Workday or Eightfold.
+
 ## Built-in Companies
 
 Amgen, AstraZeneca, Biogen, BMS, Gilead, GSK, J&J, Merck, Novartis, Pfizer, Regeneron, Sanofi
