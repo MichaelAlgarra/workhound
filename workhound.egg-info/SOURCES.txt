@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+workhound/__init__.py
+workhound/cli.py
+workhound.egg-info/PKG-INFO
+workhound.egg-info/SOURCES.txt
+workhound.egg-info/dependency_links.txt
+workhound.egg-info/entry_points.txt
+workhound.egg-info/requires.txt
+workhound.egg-info/top_level.txt

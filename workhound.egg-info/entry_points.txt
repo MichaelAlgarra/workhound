@@ -1,0 +1,2 @@
+[console_scripts]
+workhound = workhound.cli:main

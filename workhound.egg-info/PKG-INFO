@@ -1,3 +1,14 @@
+Metadata-Version: 2.4
+Name: workhound
+Version: 0.1.0
+Summary: CLI tool that sniffs out job listings across Workday and Eightfold career sites
+License-Expression: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: pandas
+Requires-Dist: urllib3
+
 # WorkHound
 
 A CLI tool that sniffs out job listings across company career sites, filters them by title, level, and location (US-only), and tracks results in a local database. Works with any company that uses **Workday** or **Eightfold** for their job board.
