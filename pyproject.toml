@@ -15,6 +15,11 @@ dependencies = [
     "urllib3",
 ]
 
+[project.urls]
+Homepage = "https://github.com/MichaelAlgarra/workhound"
+Repository = "https://github.com/MichaelAlgarra/workhound"
+Issues = "https://github.com/MichaelAlgarra/workhound/issues"
+
 [project.scripts]
 workhound = "workhound.cli:main"
 

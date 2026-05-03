@@ -18,7 +18,7 @@ Requires Python 3.10+.
 
 ```bash
 # Clone the repo
-git clone https://github.com/youruser/workhound.git
+git clone https://github.com/MichaelAlgarra/workhound.git
 cd workhound
 
 # (Recommended) Create a virtual environment
@@ -32,7 +32,7 @@ make install               # or: pip install .
 Or install directly from GitHub without cloning:
 
 ```bash
-pip install git+https://github.com/youruser/workhound.git
+pip install git+https://github.com/MichaelAlgarra/workhound.git
 ```
 
 For development (changes to the code take effect immediately):
